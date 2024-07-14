@@ -5,13 +5,15 @@ import arcweaveProject from '../arcweave.json'
 
 
 export type DialogueElement = {
+  speakerName?: string
   content: string
   options: StoryPath[]
+  end: boolean
 }
 
 @Service()
 class DialogueService {
-  readonly activeDialogue = signal<DialogueElement>(null)
+  readonly activeDialogue = signal<DialogueElement|null>(null)
   readonly story = new ArcweaveStory(arcweaveProject)
 
   startDialogue(startElementId: string) {
@@ -23,8 +25,6 @@ class DialogueService {
     this.activeDialogue.value = null
   }
 
-  // TODO handle saving and such.
-
   selectPath(path: StoryPath) {
     this.story.selectPath(path)
     this.updateActiveDialogue()
@@ -33,10 +33,11 @@ class DialogueService {
   private updateActiveDialogue() {
     const element = this.story.getCurrentElement()
     this.activeDialogue.value = {
+      speakerName: element.components.find(c => c.attributes['obj_id'] != null)?.name,
       content: element.content,
-      options: this.story.getCurrentOptions()
+      options: element.options,
+      end: element.attributes['tag'] === 'dialogue_end' || element.options.length === 0
     }
-    console.log(this.activeDialogue.value)
   }
 }
 

@@ -1,5 +1,5 @@
 import { Interpreter } from '@arcweave/arcscript'
-import { ArcweaveProject, Branch, Condition, Connection, Element, VariableItem } from './types';
+import { ArcweaveProject, Branch, Condition, Connection, VariableItem } from './types';
 
 type ResolvedConnection = Connection &{
   runtimeLabel: string
@@ -24,12 +24,28 @@ export class StoryPath {
   targetElementId?: string
 }
 
+export type RuntimeElement = {
+  id: string
+  content: string
+  attributes: {[name: string]: string}
+  options: StoryPath[]
+  components: RuntimeComponent[]
+}
+
+export type RuntimeComponent = {
+  id: string
+  name: string
+  attributes: {[name: string]: string}
+
+}
+
 export class ArcweaveStory<P extends ArcweaveProject> {
   private varValues!: {[id: string]: VariableItem['value']}
   private varObjects!: {[id: string]: VariableItem}
   private readonly elementVisits = {}
-  private currentElement: string|null
+  private currentElementId: string|null
   private interpreter!: Interpreter
+  private currentElement: RuntimeElement
 
   constructor(private projectData: P) {
      this.varObjects = Object.fromEntries(Object.entries(projectData.variables)
@@ -43,7 +59,7 @@ export class ArcweaveStory<P extends ArcweaveProject> {
       }))
      this.resetVariables()
      this.resetVisits()
-     this.interpreter = new Interpreter(this.varValues, this.varObjects, this.elementVisits, this.currentElement)
+     this.interpreter = new Interpreter(this.varValues, this.varObjects, this.elementVisits, this.currentElementId)
   }
 
   private resetVariables() {
@@ -67,21 +83,61 @@ export class ArcweaveStory<P extends ArcweaveProject> {
     })
   }
 
-  getCurrentElement(): Element|undefined {
-    return this.currentElement != null && this.currentElement != '' 
-      ? this.projectData.elements[this.currentElement]
+  getElementAttributes(elementId: string): {[name: string]: string} {
+    const attributes: {[name: string]: string} = {}
+    for (const attr of Object.values(this.projectData.attributes)) {
+      if (attr.cId === elementId && attr.cType === 'elements') {
+        attributes[attr.name] = attr.value.data
+      }
+    }
+    return attributes
+  }
+
+  getComponentAttributes(componentId: string): {[name: string]: string} {
+    const attributes: {[name: string]: string} = {}
+    for (const attr of Object.values(this.projectData.attributes)) {
+      if (attr.cId === componentId && attr.cType === 'components') {
+        attributes[attr.name] = attr.value.data
+      }
+    }
+    return attributes
+  }
+
+  getCurrentElement(): RuntimeElement|undefined {
+    return this.currentElementId != null && this.currentElementId != '' 
+      ? this.currentElement
       : undefined
   }
 
-  getCurrentRuntimeContent(): string|undefined {
-    return this.getCurrentElement()?.content
+  getCurrentElementId(): string|undefined {
+    return this.currentElementId
   }
 
   setCurrentElement(elementId: string) {
-    this.currentElement = elementId
-    const element = this.getCurrentElement()
-    if (element != null && element.content != null && element.content != '') {
-      this.interpreter.runScript(element.content, this.varValues)
+    this.currentElementId = elementId
+    const element = this.projectData.elements[this.currentElementId]    
+    if (element != null) {
+      this.currentElement = {
+        id: this.currentElementId,
+        content: '',
+        attributes: this.getElementAttributes(this.currentElementId),
+        options: this.getCurrentOptions(),
+        components: element.components.map(cId => ({
+          id: cId,
+          name: this.projectData.components[cId].name,
+          attributes: this.getComponentAttributes(cId)
+        }))
+      }
+
+      this.elementVisits[elementId]++
+      if (element.content != null && element.content != '') {
+        const result = this.interpreter.runScript(element.content, this.varValues) as {
+          output: string
+          changes: {[id: string]: VariableItem['value']}
+        }
+        this.currentElement.content = result.output
+        Object.assign(this.varValues, result.changes)
+      }
     }
   }
 
@@ -162,7 +218,7 @@ export class ArcweaveStory<P extends ArcweaveProject> {
   }
 
   getCurrentOptions(): StoryPath[] {
-   const currentElement = this.getCurrentElement()
+   const currentElement = this.projectData.elements[this.currentElementId]
    if (currentElement == null) {
     return []
    }
@@ -271,8 +327,8 @@ export class ArcweaveStory<P extends ArcweaveProject> {
 
   getSave(): SavedStory {
     const visits: SavedStory['visits'] = {...this.elementVisits}
-    if (visits[this.currentElement] != null && visits[this.currentElement] > 0) {
-      visits[this.currentElement]--
+    if (visits[this.currentElementId] != null && visits[this.currentElementId] > 0) {
+      visits[this.currentElementId]--
     }
 
     const variables: SavedStory['variables'] = {}
@@ -280,20 +336,19 @@ export class ArcweaveStory<P extends ArcweaveProject> {
       variables[varObject.name] = this.varValues[vId]
     }
 
-    return { visits, variables, currentElement: this.currentElement }
+    return { visits, variables, currentElement: this.currentElementId }
   }
 
   loadSave(save: SavedStory) {
     this.resetVariables()
     this.setVariables(save.variables)
-
     this.resetVisits()
     Object.assign(this.elementVisits, save.visits)
 
     if (save.currentElement in this.projectData.elements) {
       this.setCurrentElement(save.currentElement)
     } else {
-      this.currentElement = this.projectData.startingElement
+      this.currentElementId = this.projectData.startingElement
     }
   }
   

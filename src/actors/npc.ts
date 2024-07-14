@@ -19,10 +19,6 @@ class Npc extends BaseActor {
 
   }
 
-  onUpdate(deltaTime: number) {
-
-  } 
-
 }
 
 export default Npc

@@ -1,6 +1,7 @@
 
-import { Actor, AnimationState, AnimationStateMachine, AssetLoader, BaseActor, ViewController, attach, inject } from "@hology/core/gameplay";
+import { Actor, AnimationState, AnimationStateMachine, AssetLoader, BaseActor, attach, inject } from "@hology/core/gameplay";
 import { CharacterAnimationComponent, CharacterMovementComponent, CharacterMovementMode, ThirdPartyCameraComponent } from "@hology/core/gameplay/actors";
+import { DialogueService } from "../services/dialogue-service";
 
 @Actor()
 class Character extends BaseActor {
@@ -28,6 +29,7 @@ class Character extends BaseActor {
   })
 
   private assetLoader = inject(AssetLoader)
+  private dialogueService = inject(DialogueService)
 
   async onInit(): Promise<void> {
     const { scene, animations } = await this.assetLoader.getModelByAssetName('character-orc')
@@ -55,6 +57,24 @@ class Character extends BaseActor {
 
     this.animation.setup(scene)
     this.animation.playStateMachine(sm)
+
+    this.handleDialogues()
+  }
+
+  private handleDialogues() {
+    let pointerLockElement: Element
+    const unsubscribe = this.dialogueService.activeDialogue.subscribe(activeDialogue => {
+      if (activeDialogue != null) {
+        if (this.thirdPartyCamera.isMouseLocked) {
+          pointerLockElement = window.document.pointerLockElement
+          this.thirdPartyCamera.showCursor()
+        }
+      } else if (activeDialogue == null && pointerLockElement != null) {  
+        this.thirdPartyCamera.hideCursor()
+        pointerLockElement = null
+      }
+    })
+    this.disposed.subscribe(() => unsubscribe())
   }
 
 }

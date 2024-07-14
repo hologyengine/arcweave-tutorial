@@ -1,22 +1,20 @@
 import { ActorComponent, attach, Component, inject, Parameter } from "@hology/core/gameplay";
 import { TriggerVolumeComponent } from "@hology/core/gameplay/actors";
 import Character from "../actors/character";
-import { DialogueService } from "../services/dialogue-services";
+import { DialogueService } from "../services/dialogue-service";
 
 
 @Component()
 class DialogueStartComponent extends ActorComponent {
 
-  @Parameter() // TODO Make parameters required if they don't have default value or marked as nullable
+  @Parameter()
   public objId: string
 
   private triggerVolume = attach(TriggerVolumeComponent, {})
   private dialogueService = inject(DialogueService)
 
   onBeginPlay(): void {
-    // TODO Get the active player to filter the actor instance to use. 
-    this.triggerVolume.onBeginOverlapWithActorType(Character).subscribe(character => {
-      console.log("Start dialogue with ", character)
+    this.triggerVolume.onBeginOverlapWithActorType(Character).subscribe(() => {
       const characterId = this.dialogueService.story.findComponentId({attribute: [{name: 'obj_id', value: this.objId}]})
       if (characterId == null) {
         console.error(`Could not find character id ${this.objId}`)
@@ -30,8 +28,8 @@ class DialogueStartComponent extends ActorComponent {
       this.dialogueService.startDialogue(startElementId)
     })
 
-    this.triggerVolume.onEndOverlapWithActorType(Character).subscribe(character => {
-      console.log("End dialogue with ", character)
+    this.triggerVolume.onEndOverlapWithActorType(Character).subscribe(() => {
+      this.dialogueService.endDialogue()
     })
   }
 

@@ -15,17 +15,7 @@ class DialogueStartComponent extends ActorComponent {
 
   onBeginPlay(): void {
     this.triggerVolume.onBeginOverlapWithActorType(Character).subscribe(() => {
-      const characterId = this.dialogueService.story.findComponentId({attribute: [{name: 'obj_id', value: this.objId}]})
-      if (characterId == null) {
-        console.error(`Could not find character id ${this.objId}`)
-        return
-      }
-      const startElementId = this.dialogueService.story.findElementId({attribute: [{name: 'tag', value: 'dialogue_start'}], componentId: characterId})
-      if (startElementId == null) {
-        console.error(`Could not find dialogue start for character ${this.objId}`)
-        return
-      }
-      this.dialogueService.startDialogue(startElementId)
+      this.dialogueService.startDialogue(this.objId)
     })
 
     this.triggerVolume.onEndOverlapWithActorType(Character).subscribe(() => {

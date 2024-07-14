@@ -29,7 +29,8 @@ function Dialogue() {
     );
   };
 
-  return dialogue != null && <div style={{position: 'absolute', width: '100%', height: '100%'}}>
+  return dialogue != null && 
+    <div className="dialogue-overlay">
       <div>{dialogue.speakerName}</div>
       <div>
         {dialogue.content}

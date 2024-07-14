@@ -16,7 +16,17 @@ class DialogueService {
   readonly activeDialogue = signal<DialogueElement|null>(null)
   readonly story = new ArcweaveStory(arcweaveProject)
 
-  startDialogue(startElementId: string) {
+  startDialogue(objId: string) {
+    const characterId = this.story.findComponentId({attribute: [{name: 'obj_id', value: objId}]})
+    if (characterId == null) {
+      console.error(`Could not find character with obj_id ${objId}`)
+      return
+    }
+    const startElementId = this.story.findElementId({attribute: [{name: 'tag', value: 'dialogue_start'}], componentId: characterId})
+    if (startElementId == null) {
+      console.error(`Could not find dialogue start for character with obj_id ${objId}`)
+      return
+    }
     this.story.setCurrentElement(startElementId)
     this.updateActiveDialogue()
   }

@@ -73,3 +73,9 @@ button:focus-visible {
 .hology-overlay * {
  pointer-events: auto; 
 }
+
+.dialogue-overlay {
+  position: 'absolute';
+  width: 100%;
+  height: 100%;
+}

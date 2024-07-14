@@ -10,18 +10,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@hology/core": "^0.0.39",
-    "@hology/react": "^0.0.5",
+    "@arcweave/arcscript": "^1.0.13",
+    "@babel/runtime": "^7.24.8",
+    "@hology/core": "^0.0.45",
+    "@hology/react": "^0.0.11",
     "@preact/signals-react-transform": "^0.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "three": "^0.139.2"
+    "three": "^0.166.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.24.6",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
-    "@types/three": "^0.139.0",
+    "@types/three": "^0.166.0",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react": "^4.2.1",

@@ -2,5 +2,244 @@
   "id": "uuvu76i94",
   "name": "demo",
   "sceneId": "uuvu76i94",
-  "data": "[{\"id\":\"b141fe99-64e9-461c-b01b-84fd0d802bea\",\"name\":\"Landscape\",\"position\":[0,0,0],\"scale\":[1,1,1],\"rotation\":[0,0,0,\"XYZ\"],\"type\":\"shape_mesh\",\"collisionDetection\":true,\"materialAssignments\":[],\"castShadow\":true,\"receiveShadow\":true,\"shape\":\"landscape\",\"landscape\":{\"options\":{\"sectionSize\":100,\"sections\":{\"x\":4,\"y\":4},\"density\":40},\"heightMaps\":[]},\"grass\":{\"layers\":[]}},{\"id\":\"fd09dbf6-cde0-4953-99bf-f5186ed69fbe\",\"name\":\"SpawnPoint\",\"position\":[-195.26019015172233,-1.7763568394002505e-15,137.34141960071278],\"scale\":[1,1,1],\"rotation\":[0,0,0,\"XYZ\"],\"type\":\"actor\",\"actor\":{\"type\":\"SpawnPoint\",\"innerParams\":[{\"path\":[\"mesh\"],\"params\":{}}],\"params\":{}}},{\"id\":\"auto-sky\",\"name\":\"Sky\",\"type\":\"sky\",\"position\":[0,0,0],\"scale\":[1,1,1],\"rotation\":[0,0,0],\"collisionDetection\":false,\"sky\":{\"materialId\":null}},{\"id\":\"auto-global-fog\",\"name\":\"Global fog\",\"type\":\"global_fog\",\"position\":[0,0,0],\"scale\":[1,1,1],\"rotation\":[0,0,0],\"collisionDetection\":false,\"fog\":{\"type\":\"density\",\"color\":\"#b8f8ff\",\"density\":0.005,\"near\":100,\"far\":1000}}]"
+  "data": [
+    {
+      "id": "b141fe99-64e9-461c-b01b-84fd0d802bea",
+      "name": "Landscape",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        "XYZ"
+      ],
+      "type": "shape_mesh",
+      "collisionDetection": true,
+      "materialAssignments": [],
+      "castShadow": true,
+      "receiveShadow": true,
+      "shape": "landscape",
+      "landscape": {
+        "options": {
+          "sectionSize": 100,
+          "sections": {
+            "x": 4,
+            "y": 4
+          },
+          "density": 40
+        },
+        "heightMaps": []
+      },
+      "grass": {
+        "layers": []
+      },
+      "physics": {
+        "type": 2,
+        "friction": 0.5,
+        "density": 1,
+        "restitution": 0.5,
+        "mass": 1
+      }
+    },
+    {
+      "id": "fd09dbf6-cde0-4953-99bf-f5186ed69fbe",
+      "name": "SpawnPoint",
+      "position": [
+        -195.26019015172233,
+        -1.7763568394002505e-15,
+        137.34141960071278
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "rotation": [
+        0,
+        3.141592653589793,
+        0,
+        "XYZ"
+      ],
+      "type": "actor",
+      "actor": {
+        "type": "SpawnPoint",
+        "innerParams": [
+          {
+            "path": [
+              "mesh"
+            ],
+            "params": {}
+          }
+        ],
+        "params": {}
+      }
+    },
+    {
+      "id": "auto-sky",
+      "name": "Sky",
+      "type": "sky",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "collisionDetection": false,
+      "sky": {
+        "materialId": null
+      }
+    },
+    {
+      "id": "auto-global-fog",
+      "name": "Global fog",
+      "type": "global_fog",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "collisionDetection": false,
+      "fog": {
+        "type": "density",
+        "color": "#b8f8ff",
+        "density": 0.005,
+        "near": 100,
+        "far": 1000
+      }
+    },
+    {
+      "id": "a490e0ee-43a7-4096-b0a2-bb6f3ac60bb5",
+      "name": "Healer",
+      "position": [
+        -194.29849810558932,
+        -1.7763568394002505e-15,
+        132.78865639763592
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        "XYZ"
+      ],
+      "type": "actor",
+      "actor": {
+        "type": "Npc",
+        "innerParams": [
+          {
+            "path": [
+              "dialogueStart"
+            ],
+            "params": {
+              "objId": {
+                "type": 12,
+                "value": "HEALER"
+              }
+            }
+          },
+          {
+            "path": [
+              "dialogueStart",
+              "triggerVolume"
+            ],
+            "params": {}
+          },
+          {
+            "path": [
+              "dialogueStart",
+              "triggerVolume",
+              "editorMesh"
+            ],
+            "params": {}
+          }
+        ],
+        "params": {}
+      }
+    },
+    {
+      "id": "1e8ef35d-97f3-46cd-9445-dac266d96239",
+      "name": "Wanda",
+      "position": [
+        -189.72291758241502,
+        -1.7763568394002505e-15,
+        134.15663784579402
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        "XYZ"
+      ],
+      "type": "actor",
+      "actor": {
+        "type": "Npc",
+        "innerParams": [
+          {
+            "path": [
+              "dialogueStart"
+            ],
+            "params": {
+              "objId": {
+                "type": 12,
+                "value": "WANDA"
+              }
+            }
+          },
+          {
+            "path": [
+              "dialogueStart",
+              "triggerVolume"
+            ],
+            "params": {}
+          },
+          {
+            "path": [
+              "dialogueStart",
+              "triggerVolume",
+              "editorMesh"
+            ],
+            "params": {}
+          }
+        ],
+        "params": {}
+      }
+    }
+  ]
 }

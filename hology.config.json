@@ -1,5 +1,5 @@
 {
-  "name": "movement-tutorial",
+  "name": "arcweave-tutorial",
   "staticPath": "public",
   "dataPath": "public/data",
   "shadersPath": "src/shaders",

@@ -114,7 +114,11 @@ export type Attribute = {
   cType: 'elements'|'components'|string
   value: {
     data: string
-    type: string
+    type: 'string'|string
+    plain?: boolean
+  } | {
+    data: string[]
+    type: 'component-list'
     plain?: boolean
   }
 }

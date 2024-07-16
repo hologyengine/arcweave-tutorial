@@ -1,7 +1,7 @@
 import { Interpreter } from '@arcweave/arcscript'
 import { ArcweaveProject, Branch, Condition, Connection, VariableItem } from './types';
 
-type ResolvedConnection = Connection &{
+type ResolvedConnection = Connection & {
   runtimeLabel: string
 }
 
@@ -18,7 +18,7 @@ export type ComponentQuery = {
   attribute?: AttributeFilter[]
 }
 
-export class StoryPath {
+export class StoryOption {
   label?: string
   readonly connections: ResolvedConnection[] = []
   targetElementId?: string
@@ -27,16 +27,21 @@ export class StoryPath {
 export type RuntimeElement = {
   id: string
   content: string
-  attributes: {[name: string]: string}
-  options: StoryPath[]
+  attributes: {[name: string]: string|string[]}
+  options: StoryOption[]
   components: RuntimeComponent[]
 }
 
 export type RuntimeComponent = {
   id: string
   name: string
-  attributes: {[name: string]: string}
+  attributes: {[name: string]: string|string[]}
+}
 
+export type SavedStory = {
+  currentElement: string
+  variables: {[name: string]: VariableItem['value']}
+  visits: {[eId: string]: number}
 }
 
 export class ArcweaveStory<P extends ArcweaveProject> {
@@ -57,10 +62,9 @@ export class ArcweaveStory<P extends ArcweaveProject> {
           return []
         }
       }))
-     this.resetVariables()
-     this.resetVisits()
      this.interpreter = new Interpreter(this.varValues, this.varObjects, this.elementVisits, this.currentElementId)
-  }
+     this.resetStory()
+    }
 
   private resetVariables() {
     if (this.varValues == null) {
@@ -83,8 +87,8 @@ export class ArcweaveStory<P extends ArcweaveProject> {
     })
   }
 
-  getElementAttributes(elementId: string): {[name: string]: string} {
-    const attributes: {[name: string]: string} = {}
+  getElementAttributes(elementId: string): {[name: string]: string|string[]} {
+    const attributes: {[name: string]: string|string[]} = {}
     for (const attr of Object.values(this.projectData.attributes)) {
       if (attr.cId === elementId && attr.cType === 'elements') {
         attributes[attr.name] = attr.value.data
@@ -93,11 +97,16 @@ export class ArcweaveStory<P extends ArcweaveProject> {
     return attributes
   }
 
-  getComponentAttributes(componentId: string): {[name: string]: string} {
-    const attributes: {[name: string]: string} = {}
+  getComponentAttributes(componentId: string): {[name: string]: string|string[]} {
+    const attributes: {[name: string]: string|string[]} = {}
     for (const attr of Object.values(this.projectData.attributes)) {
       if (attr.cId === componentId && attr.cType === 'components') {
-        attributes[attr.name] = attr.value.data
+        let value = attr.value.data
+        if (attr.value.plain && !Array.isArray(value)) {
+          // @ts-expect-error runScript does not have a correct return type
+          value = this.interpreter.runScript(value, this.varValues).output
+        }
+        attributes[attr.name] = value
       }
     }
     return attributes
@@ -116,28 +125,29 @@ export class ArcweaveStory<P extends ArcweaveProject> {
   setCurrentElement(elementId: string) {
     this.currentElementId = elementId
     const element = this.projectData.elements[this.currentElementId]    
-    if (element != null) {
-      this.currentElement = {
-        id: this.currentElementId,
-        content: '',
-        attributes: this.getElementAttributes(this.currentElementId),
-        options: this.getCurrentOptions(),
-        components: element.components.map(cId => ({
-          id: cId,
-          name: this.projectData.components[cId].name,
-          attributes: this.getComponentAttributes(cId)
-        }))
-      }
+    if (element == null) {
+      return
+    }
+    this.currentElement = {
+      id: this.currentElementId,
+      content: '',
+      attributes: this.getElementAttributes(this.currentElementId),
+      options: this.getCurrentOptions(),
+      components: element.components.map(cId => ({
+        id: cId,
+        name: this.projectData.components[cId].name,
+        attributes: this.getComponentAttributes(cId)
+      }))
+    }
 
-      this.elementVisits[elementId]++
-      if (element.content != null && element.content != '') {
-        const result = this.interpreter.runScript(element.content, this.varValues) as {
-          output: string
-          changes: {[id: string]: VariableItem['value']}
-        }
-        this.currentElement.content = result.output
-        Object.assign(this.varValues, result.changes)
+    this.elementVisits[elementId]++
+    if (element.content != null && element.content != '') {
+      const result = this.interpreter.runScript(element.content, this.varValues) as {
+        output: string
+        changes: {[id: string]: VariableItem['value']}
       }
+      this.currentElement.content = result.output
+      Object.assign(this.varValues, result.changes)
     }
   }
 
@@ -177,7 +187,6 @@ export class ArcweaveStory<P extends ArcweaveProject> {
    * @param query 
    * @returns 
    */
-
   findElementId(query: ElementQuery): string|undefined {
     const attributes = Object.values(this.projectData.attributes)
     return Object.keys(this.projectData.elements).find(eId => {
@@ -185,7 +194,7 @@ export class ArcweaveStory<P extends ArcweaveProject> {
         const attrValue = attributes.find(a => a.cType === 'elements' && a.cId === eId && a.name === attrFilter.name)?.value?.data
         if (attrFilter.value !== undefined) {
           return attrValue === attrFilter.value
-        } else if (typeof attrFilter.predicate === 'function' && attrValue != null) {
+        } else if (typeof attrFilter.predicate === 'function' && attrValue != null && !Array.isArray(attrValue)) {
           return attrFilter.predicate(attrValue)
         }
         return false
@@ -202,7 +211,7 @@ export class ArcweaveStory<P extends ArcweaveProject> {
         const attrValue = attributes.find(a => a.cType === 'components' && a.cId === cId && a.name === attrFilter.name)?.value?.data
         if (attrFilter.value !== undefined) {
           return attrValue === attrFilter.value
-        } else if (typeof attrFilter.predicate === 'function' && attrValue != null) {
+        } else if (typeof attrFilter.predicate === 'function' && attrValue != null && !Array.isArray(attrValue)) {
           return attrFilter.predicate(attrValue)
         }
         return false
@@ -217,7 +226,7 @@ export class ArcweaveStory<P extends ArcweaveProject> {
     this.setCurrentElement(this.projectData.startingElement)
   }
 
-  getCurrentOptions(): StoryPath[] {
+  getCurrentOptions(): StoryOption[] {
    const currentElement = this.projectData.elements[this.currentElementId]
    if (currentElement == null) {
     return []
@@ -232,8 +241,8 @@ export class ArcweaveStory<P extends ArcweaveProject> {
    return paths
   }
 
-  private resolvePath(connectionId: string): StoryPath|undefined {
-    const path = new StoryPath()
+  private resolvePath(connectionId: string): StoryOption|undefined {
+    const path = new StoryOption()
     
     let next: string|undefined = connectionId
     while (next != null && path.targetElementId == null) {
@@ -318,7 +327,7 @@ export class ArcweaveStory<P extends ArcweaveProject> {
     return !!output.result.condition;
   }
 
-  selectPath(path: StoryPath) {
+  selectOption(path: StoryOption) {
     if (path.targetElementId == null) {
       return
     }
@@ -352,10 +361,4 @@ export class ArcweaveStory<P extends ArcweaveProject> {
     }
   }
   
-}
-
-type SavedStory = {
-  currentElement: string
-  variables: {[name: string]: VariableItem['value']}
-  visits: {[eId: string]: number}
 }

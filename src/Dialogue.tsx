@@ -8,33 +8,31 @@ function Dialogue() {
 
   const renderButtons = () => {
     if (dialogue.end) {
-      return <button onClick={() => dialogueService.endDialogue()}>Leave</button>;
+      return <button onClick={() => dialogueService.endDialogue()}>Leave</button>
     }
 
     if (dialogue.options.length > 1) {
       return dialogue.options.map(option => (
         <button 
-          onClick={() => dialogueService.selectPath(option)} 
+          onClick={() => dialogueService.selectOption(option)} 
           key={option.label}
         >
           {option.label}
         </button>
-      ));
+      ))
     }
 
     return (
-      <button onClick={() => dialogueService.selectPath(dialogue.options[0])}>
+      <button onClick={() => dialogueService.selectOption(dialogue.options[0])}>
         Continue
       </button>
-    );
-  };
+    )
+  }
 
   return dialogue != null && 
     <div className="dialogue-overlay">
       <div>{dialogue.speakerName}</div>
-      <div>
-        {dialogue.content}
-      </div>
+      <div>{dialogue.content}</div>
       <div className="choices">{renderButtons()}</div>
     </div>
 }

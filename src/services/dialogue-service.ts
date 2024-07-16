@@ -1,13 +1,13 @@
 import { Service } from "@hology/core/gameplay";
 import { signal } from "@preact/signals-react"
-import { ArcweaveStory, StoryPath } from "../arcweave/story";
+import { ArcweaveStory, StoryOption } from "../arcweave/story";
 import arcweaveProject from '../arcweave.json'
 
 
 export type DialogueElement = {
   speakerName?: string
   content: string
-  options: StoryPath[]
+  options: StoryOption[]
   end: boolean
 }
 
@@ -35,8 +35,8 @@ class DialogueService {
     this.activeDialogue.value = null
   }
 
-  selectPath(path: StoryPath) {
-    this.story.selectPath(path)
+  selectOption(path: StoryOption) {
+    this.story.selectOption(path)
     this.updateActiveDialogue()
   }
 

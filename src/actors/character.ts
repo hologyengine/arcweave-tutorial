@@ -46,6 +46,7 @@ class Character extends BaseActor {
 
     idle.transitionsBetween(walk, () => this.movement.horizontalSpeed > 0)
     walk.transitionsBetween(sprint, () => this.movement.isSprinting)
+    sprint.transitionsTo(idle, () => this.movement.horizontalSpeed == 0)
     idle.transitionsTo(sit, elapsedTime => elapsedTime > 1)
     sit.transitionsTo(walk, () => this.movement.horizontalSpeed > 0)
   

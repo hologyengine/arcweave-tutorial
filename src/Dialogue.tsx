@@ -6,18 +6,18 @@ function Dialogue() {
   const dialogueService = useService(DialogueService)
   const dialogue = dialogueService.activeDialogue.value
 
-  const renderButtons = () => {
+  const optionButtons = () => {
     if (dialogue.end) {
       return <button onClick={() => dialogueService.endDialogue()}>Leave</button>
     }
 
     if (dialogue.options.length > 1) {
       return dialogue.options.map(option => (
-        <button 
+        <button
           onClick={() => dialogueService.selectOption(option)} 
           key={option.label}
-        >
-          {option.label}
+          dangerouslySetInnerHTML={{__html: option.label}}
+        > 
         </button>
       ))
     }
@@ -31,9 +31,11 @@ function Dialogue() {
 
   return dialogue != null && 
     <div className="dialogue-overlay">
-      <div>{dialogue.speakerName}</div>
-      <div>{dialogue.content}</div>
-      <div className="choices">{renderButtons()}</div>
+      <div className="dialogue-wrapper">
+        <div className="dialogue-name">{dialogue.speakerName}</div>
+        <div className="dialogue-content" dangerouslySetInnerHTML={{__html: dialogue.content}}></div>
+        <div className="dialogue-options">{optionButtons()}</div>
+      </div>
     </div>
 }
 

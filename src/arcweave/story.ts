@@ -91,7 +91,12 @@ export class ArcweaveStory<P extends ArcweaveProject> {
     const attributes: {[name: string]: string|string[]} = {}
     for (const attr of Object.values(this.projectData.attributes)) {
       if (attr.cId === elementId && attr.cType === 'elements') {
-        attributes[attr.name] = attr.value.data
+        let value = attr.value.data
+        if (!attr.value.plain && !Array.isArray(value)) {
+          // @ts-expect-error runScript does not have a correct return type
+          value = this.interpreter.runScript(value, this.varValues).output
+        }
+        attributes[attr.name] = value
       }
     }
     return attributes
@@ -102,7 +107,7 @@ export class ArcweaveStory<P extends ArcweaveProject> {
     for (const attr of Object.values(this.projectData.attributes)) {
       if (attr.cId === componentId && attr.cType === 'components') {
         let value = attr.value.data
-        if (attr.value.plain && !Array.isArray(value)) {
+        if (!attr.value.plain && !Array.isArray(value)) {
           // @ts-expect-error runScript does not have a correct return type
           value = this.interpreter.runScript(value, this.varValues).output
         }

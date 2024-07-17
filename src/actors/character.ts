@@ -34,6 +34,7 @@ class Character extends BaseActor {
 
   async onInit(): Promise<void> {
     const { scene, animations } = await this.assetLoader.getModelByAssetName('character-human')
+    scene.traverse(o => o.castShadow = true)
 
     this.object.add(scene)
 

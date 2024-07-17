@@ -24,7 +24,12 @@
       ],
       "type": "shape_mesh",
       "collisionDetection": true,
-      "materialAssignments": [],
+      "materialAssignments": [
+        {
+          "color": "#aaaaaa",
+          "materialId": "9c8b0dab-7194-45a5-b887-e6c5a38a91b0"
+        }
+      ],
       "castShadow": true,
       "receiveShadow": true,
       "shape": "landscape",

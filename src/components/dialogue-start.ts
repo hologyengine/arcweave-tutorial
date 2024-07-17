@@ -10,7 +10,7 @@ class DialogueStartComponent extends ActorComponent {
   @Parameter()
   public objId: string
 
-  private triggerVolume = attach(TriggerVolumeComponent, {})
+  private triggerVolume = attach(TriggerVolumeComponent)
   private dialogueService = inject(DialogueService)
 
   onBeginPlay(): void {

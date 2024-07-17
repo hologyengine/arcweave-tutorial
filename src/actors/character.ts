@@ -17,7 +17,8 @@ class Character extends BaseActor {
     fallingMovementControl: 0.2,
     colliderHeight: .4,
     colliderRadius: 0.2,
-    jumpVelocity: 3.5
+    jumpVelocity: 3.5,
+    offset: 0.01
   })
   public readonly thirdPartyCamera = attach(ThirdPartyCameraComponent, {
     height: .7,
@@ -32,7 +33,7 @@ class Character extends BaseActor {
   private dialogueService = inject(DialogueService)
 
   async onInit(): Promise<void> {
-    const { scene, animations } = await this.assetLoader.getModelByAssetName('character-orc')
+    const { scene, animations } = await this.assetLoader.getModelByAssetName('character-human')
 
     this.object.add(scene)
 
@@ -40,17 +41,14 @@ class Character extends BaseActor {
   
     const idle = new AnimationState(clips.idle)
     const walk = new AnimationState(clips.walk)
-    const sit = new AnimationState(clips.sit)
     const jump = new AnimationState(clips.jump)
     const sprint = new AnimationState(clips.sprint)
 
     idle.transitionsBetween(walk, () => this.movement.horizontalSpeed > 0)
     walk.transitionsBetween(sprint, () => this.movement.isSprinting)
     sprint.transitionsTo(idle, () => this.movement.horizontalSpeed == 0)
-    idle.transitionsTo(sit, elapsedTime => elapsedTime > 1)
-    sit.transitionsTo(walk, () => this.movement.horizontalSpeed > 0)
   
-    for (const state of [idle, walk, sit, sprint]) {
+    for (const state of [idle, walk, sprint]) {
       state.transitionsBetween(jump, () => this.movement.mode === CharacterMovementMode.falling)
     }
 

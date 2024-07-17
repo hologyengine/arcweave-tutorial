@@ -157,9 +157,9 @@ export class ArcweaveStory<P extends ArcweaveProject> {
   }
 
   getVariables() {
-    return Object.fromEntries(Object.entries(this.projectData.variables).map(([,v]) => {
+    return Object.fromEntries(Object.entries(this.projectData.variables).map(([vId,v]) => {
       if ('name' in v) {
-          return [v.name, v.value]
+          return [v.name, this.varValues[vId] ?? v.value]
       } else {
           return []
       }

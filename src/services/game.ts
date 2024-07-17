@@ -11,7 +11,7 @@ class Game extends GameInstance {
   private physics = inject(PhysicsSystem)
 
   async onStart() {
-    this.physics.showDebug = true
+    this.physics.showDebug = false
 
     const spawnPoint = this.world.findActorByType(SpawnPoint)
     const character = await spawnPoint.spawnActor(Character)

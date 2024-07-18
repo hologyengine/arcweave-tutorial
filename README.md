@@ -1,30 +1,26 @@
-## React + TypeScript + Vite
+## Hology Arcweave Demo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project demonstrates how [Arcweave](https://arcweave.com/) can be used with [Hology Engine](https://hology.app/).
 
-Currently, two official plugins are available:
+[Try it here](https://hologyengine.github.io/arcweave-tutorial/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Dialogue Service
 
-## Expanding the ESLint configurationgit
+The DialogueService in `src/services/dialogue-service.ts` acts as an interface between the Arcwave story and user interface.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+It imports the Arcweave data from the arcweave.json file and creates an ArcweaveStory instance.
 
-- Configure the top-level `parserOptions` property like this:
+It enables game play logic to start a dialogue and find the dialogues starting element using an `obj_id` defined by author on Arweave components and a `dialogue_start` attribute. 
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+It has a signal for the active dialogue to be used by the user interface to display the dialogue and options.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+A method `selectOption` exists to select an option in the story based on the player's input.
+
+
+### Dialogue Start Component
+
+An actor component in `src/components/dialogue-start.ts` is attached to an NPC actor defined in `src/actors/npc.ts` which has a trigger volume to start a dialogue. It has a parameter for an `obj_id` so that you can connect the NPC actor instance to a character in the story. 
+
+### Dialogue UI
+
+The React component in `src/Dialogue.tsx` displays the current dialogue and option buttons for the player to click. 

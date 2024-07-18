@@ -1,7 +1,7 @@
 import { Service } from "@hology/core/gameplay";
 import { signal } from "@preact/signals-react"
-import { ArcweaveStory, StoryOption } from "../arcweave/story";
 import arcweaveProject from '../arcweave.json'
+import { StoryOption, ArcweaveStory } from "@hology/arcweave";
 
 
 export type DialogueElement = {

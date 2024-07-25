@@ -8,7 +8,7 @@ import Dialogue from './Dialogue';
 
 function App() {
   return (
-    <HologyScene gameClass={Game} sceneName='demo' dataDir='data' shaders={shaders} actors={actors}>
+    <HologyScene gameClass={Game} sceneName='demo' dataDir='data' shaders={shaders} actors={actors} rendering={{maxPixelRatio: 2}}>
       <Dialogue/>
     </HologyScene>
   );

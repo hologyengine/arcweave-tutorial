@@ -2,7 +2,7 @@
   "name": "Ground",
   "type": "material",
   "material": {
-    "type": "standard",
+    "type": "lambert",
     "params": {
       "metalness": 0,
       "opacity": 1
@@ -13,11 +13,15 @@
         "type": 10,
         "value": "#d7caac"
       },
-      "roughness": {
+      "emissive": {
+        "type": 10,
+        "value": "#000000"
+      },
+      "emissiveIntensity": {
         "type": 1
       },
-      "metalness": {
-        "type": 1
+      "emissiveMap": {
+        "type": 2
       },
       "map": {
         "type": 2
@@ -34,45 +38,7 @@
       "aoMapIntensity": {
         "type": 1
       },
-      "emissive": {
-        "type": 10,
-        "value": "#000000"
-      },
-      "emissiveIntensity": {
-        "type": 1
-      },
-      "emissiveMap": {
-        "type": 2
-      },
-      "bumpMap": {
-        "type": 2
-      },
-      "bumpScale": {
-        "type": 1
-      },
-      "normalMap": {
-        "type": 2
-      },
-      "normalScale": {
-        "type": 6,
-        "value": [
-          0,
-          0
-        ]
-      },
-      "displacementMap": {
-        "type": 2
-      },
-      "displacementScale": {
-        "type": 1
-      },
-      "displacementBias": {
-        "type": 1
-      },
-      "roughnessMap": {
-        "type": 2
-      },
-      "metalnessMap": {
+      "specularMap": {
         "type": 2
       },
       "alphaMap": {
@@ -81,7 +47,7 @@
       "envMap": {
         "type": 2
       },
-      "envMapIntensity": {
+      "reflectivity": {
         "type": 1
       },
       "refractionRatio": {

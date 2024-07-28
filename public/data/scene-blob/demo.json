@@ -196,7 +196,12 @@
             "params": {}
           }
         ],
-        "params": {}
+        "params": {
+          "model": {
+            "type": 15,
+            "value": "9c9b835e-fbda-4ea5-8550-b69b301fb7f8"
+          }
+        }
       }
     },
     {
@@ -255,7 +260,12 @@
             "params": {}
           }
         ],
-        "params": {}
+        "params": {
+          "model": {
+            "type": 15,
+            "value": "9c9b8360-d5fe-4804-8122-b3d0ad813ecb"
+          }
+        }
       }
     }
   ]

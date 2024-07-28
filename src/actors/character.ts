@@ -2,6 +2,7 @@
 import { Actor, AnimationState, AnimationStateMachine, AssetLoader, BaseActor, attach, inject } from "@hology/core/gameplay";
 import { CharacterAnimationComponent, CharacterMovementComponent, CharacterMovementMode, ThirdPartyCameraComponent } from "@hology/core/gameplay/actors";
 import { DialogueService } from "../services/dialogue-service";
+import { hideWeapons } from "./npc";
 
 @Actor()
 class Character extends BaseActor {
@@ -33,17 +34,18 @@ class Character extends BaseActor {
   private dialogueService = inject(DialogueService)
 
   async onInit(): Promise<void> {
-    const { scene, animations } = await this.assetLoader.getModelByAssetName('character-human')
-    scene.traverse(o => o.castShadow = true)
+    const { scene, animations } = await this.assetLoader.getModelByAssetName('Rogue_Hooded')
+    scene.scale.multiplyScalar(0.5)
+    hideWeapons(scene)
 
     this.object.add(scene)
 
     const clips = Object.fromEntries(animations.map(clip => [clip.name, clip]))
   
-    const idle = new AnimationState(clips.idle)
-    const walk = new AnimationState(clips.walk)
-    const jump = new AnimationState(clips.jump)
-    const sprint = new AnimationState(clips.sprint)
+    const idle = new AnimationState(clips.Idle)
+    const walk = new AnimationState(clips.Walking_A)
+    const jump = new AnimationState(clips.Jump_Idle)
+    const sprint = new AnimationState(clips.Running_A)
 
     idle.transitionsBetween(walk, () => this.movement.horizontalSpeed > 0)
     walk.transitionsBetween(sprint, () => this.movement.isSprinting)

@@ -1,0 +1,12 @@
+{
+  "name": "Rogue_Hooded",
+  "path": "",
+  "type": "mesh",
+  "collisionDetection": true,
+  "id": "9c9b835f-7d44-4ca8-9a2b-cbcfb91cb55b",
+  "fileKey": "Rogue_Hooded.glb",
+  "fileFormat": "glb",
+  "sourceFile": "/Users/adamringhede/Downloads/KayKit_Adventurers_1.0_FREE 2/Characters/gltf/Rogue_Hooded.glb",
+  "mesh": {},
+  "castShadow": true
+}

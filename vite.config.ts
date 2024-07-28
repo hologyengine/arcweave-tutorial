@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import hologyBuild from '@hology/vite-plugin'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -7,6 +8,7 @@ export default defineConfig({
     target: "es2020",
   },
   plugins: [
+    hologyBuild(),
     react({
       babel: {
         plugins: [

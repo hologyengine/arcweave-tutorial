@@ -1,0 +1,12 @@
+{
+  "name": "Mage",
+  "path": "",
+  "type": "mesh",
+  "collisionDetection": true,
+  "id": "9c9b835e-fbda-4ea5-8550-b69b301fb7f8",
+  "fileKey": "Mage.glb",
+  "fileFormat": "glb",
+  "sourceFile": "/Users/adamringhede/Downloads/KayKit_Adventurers_1.0_FREE 2/Characters/gltf/Mage.glb",
+  "mesh": {},
+  "castShadow": true
+}

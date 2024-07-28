@@ -1,0 +1,12 @@
+{
+  "name": "Rogue",
+  "path": "",
+  "type": "mesh",
+  "collisionDetection": true,
+  "id": "9c9b8360-d5fe-4804-8122-b3d0ad813ecb",
+  "fileKey": "Rogue.glb",
+  "fileFormat": "glb",
+  "sourceFile": "/Users/adamringhede/Downloads/KayKit_Adventurers_1.0_FREE 2/Characters/gltf/Rogue.glb",
+  "mesh": {},
+  "castShadow": true
+}

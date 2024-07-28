@@ -2,6 +2,7 @@ import { ActorComponent, attach, Component, inject, Parameter } from "@hology/co
 import { TriggerVolumeComponent } from "@hology/core/gameplay/actors";
 import Character from "../actors/character";
 import { DialogueService } from "../services/dialogue-service";
+import { Vector3 } from "three";
 
 
 @Component()
@@ -10,7 +11,7 @@ class DialogueStartComponent extends ActorComponent {
   @Parameter()
   public objId: string
 
-  private triggerVolume = attach(TriggerVolumeComponent)
+  private triggerVolume = attach(TriggerVolumeComponent, { dimensions: new Vector3(2, 2, 2) })
   private dialogueService = inject(DialogueService)
 
   onBeginPlay(): void {

@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@hology/arcweave": "^0.0.1",
-    "@hology/core": "^0.0.52",
+    "@hology/core": "^0.0.53",
     "@hology/react": "^0.0.11",
     "@preact/signals-react-transform": "^0.3.1",
     "react": "^18.2.0",

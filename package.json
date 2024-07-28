@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@babel/runtime": "^7.24.8",
     "@hology/arcweave": "^0.0.1",
     "@hology/core": "^0.0.51",
     "@hology/react": "^0.0.11",

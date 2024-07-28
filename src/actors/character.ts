@@ -23,7 +23,7 @@ class Character extends BaseActor {
   })
   public readonly thirdPartyCamera = attach(ThirdPartyCameraComponent, {
     height: .7,
-    offsetX: -0.3,
+    offsetX: 0,
     offsetZ: 0.2,
     minDistance: 3,
     maxDistance: 3,
